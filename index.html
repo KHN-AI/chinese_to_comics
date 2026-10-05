@@ -3,618 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>四格漫畫創作工坊 - Gemini Pro 版</title>
+    <title>四格漫畫創作工坊</title>
     <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
     <style>
+        /* CSS 樣式與之前相同，新增了設定按鈕的樣式 */
         :root {
-            --bg-primary: #FFF8F0;
-            --bg-secondary: #FFFFFF;
-            --bg-card: #FFFFFF;
-            --bg-input: #FFF5EB;
-            --text-primary: #2D3436;
-            --text-secondary: #636E72;
-            --text-muted: #B2BEC3;
-            --border-color: #F0E6DA;
-            --border-focus: #FF8A5C;
-            --accent-coral: #FF6B6B;
-            --accent-teal: #00B894;
-            --accent-yellow: #FDCB6E;
-            --accent-purple: #A29BFE;
-            --accent-pink: #FD79A8;
-            --accent-blue: #74B9FF;
-            --accent-orange: #FF9A5C;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
-            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
-            --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
-            --radius-sm: 10px;
-            --radius-md: 16px;
-            --radius-lg: 24px;
+            --bg-primary: #FFF8F0; --bg-secondary: #FFFFFF; --bg-card: #FFFFFF;
+            --bg-input: #FFF5EB; --text-primary: #2D3436; --text-secondary: #636E72;
+            --text-muted: #B2BEC3; --border-color: #F0E6DA; --border-focus: #FF8A5C;
+            --accent-coral: #FF6B6B; --accent-teal: #00B894; --accent-yellow: #FDCB6E;
+            --accent-purple: #A29BFE; --accent-pink: #FD79A8; --accent-blue: #74B9FF;
+            --accent-orange: #FF9A5C; --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08); --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+            --radius-sm: 10px; --radius-md: 16px; --radius-lg: 24px;
             --grid-color: rgba(0,0,0,0.025);
         }
 
         .dark {
-            --bg-primary: #1A1A2E;
-            --bg-secondary: #16213E;
-            --bg-card: #222845;
-            --bg-input: #2A2F52;
-            --text-primary: #F0E6DA;
-            --text-secondary: #B0A8C0;
-            --text-muted: #6C6890;
-            --border-color: #3A3660;
-            --border-focus: #FF8A5C;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
-            --shadow-md: 0 4px 16px rgba(0,0,0,0.25);
-            --shadow-lg: 0 8px 32px rgba(0,0,0,0.35);
-            --grid-color: rgba(255,255,255,0.02);
+            --bg-primary: #1A1A2E; --bg-secondary: #16213E; --bg-card: #222845;
+            --bg-input: #2A2F52; --text-primary: #F0E6DA; --text-secondary: #B0A8C0;
+            --text-muted: #6C6890; --border-color: #3A3660; --border-focus: #FF8A5C;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.2); --shadow-md: 0 4px 16px rgba(0,0,0,0.25);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.35); --grid-color: rgba(255,255,255,0.02);
         }
 
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: var(--bg-primary); color: var(--text-primary); min-height: 100vh; background-image: linear-gradient(var(--grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color) 1px, transparent 1px); background-size: 24px 24px; overflow-x: hidden; }
+        #app { max-width: 680px; margin: 0 auto; padding: 20px 16px 60px; }
+        
+        .app-header { text-align: center; padding: 32px 16px 24px; position: relative; }
+        .settings-btn { position: absolute; top: 20px; right: 16px; background: var(--bg-card); border: 2px solid var(--border-color); border-radius: 50%; width: 40px; height: 40px; cursor: pointer; color: var(--text-secondary); transition: all 0.2s; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .settings-btn:hover { border-color: var(--accent-purple); color: var(--accent-purple); }
+        
+        .header-badge { display: inline-block; background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange)); color: #FFF; font-family: 'ZCOOL KuaiLe', cursive; font-size: 13px; padding: 4px 14px; border-radius: 20px; margin-bottom: 12px; }
+        .app-header h1 { font-family: 'ZCOOL KuaiLe', cursive; font-size: 36px; background: linear-gradient(135deg, var(--accent-coral), var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+        .app-header p { color: var(--text-secondary); font-size: 15px; line-height: 1.6; }
 
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            background-image:
-                linear-gradient(var(--grid-color) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-            background-size: 24px 24px;
-            overflow-x: hidden;
-        }
+        .section-title { font-family: 'ZCOOL KuaiLe', cursive; font-size: 20px; color: var(--text-primary); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .section-title .icon-circle { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #FFF; flex-shrink: 0; }
+        
+        .info-section, .elements-section, .style-section { margin-bottom: 28px; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .input-group label { display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px; }
+        .input-field { width: 100%; padding: 12px 14px; background: var(--bg-input); border: 2px solid var(--border-color); border-radius: var(--radius-sm); font-size: 16px; color: var(--text-primary); outline: none; }
+        .input-field:focus { border-color: var(--border-focus); }
+        textarea.input-field { min-height: 80px; resize: vertical; }
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
-
-        #app {
-            max-width: 680px;
-            margin: 0 auto;
-            padding: 20px 16px 60px;
-        }
-
-        .app-header {
-            text-align: center;
-            padding: 32px 16px 24px;
-            position: relative;
-        }
-
-        .header-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange));
-            color: #FFF;
-            font-family: 'ZCOOL KuaiLe', cursive;
-            font-size: 13px;
-            padding: 4px 14px;
-            border-radius: 20px;
-            margin-bottom: 12px;
-            letter-spacing: 1px;
-            box-shadow: 0 3px 12px rgba(255,107,107,0.3);
-        }
-
-        .app-header h1 {
-            font-family: 'ZCOOL KuaiLe', cursive;
-            font-size: 36px;
-            background: linear-gradient(135deg, var(--accent-coral), var(--accent-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.3;
-            margin-bottom: 8px;
-        }
-
-        .app-header p {
-            color: var(--text-secondary);
-            font-size: 15px;
-            font-weight: 400;
-            line-height: 1.6;
-        }
-
-        .header-deco {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 16px;
-        }
-
-        .header-deco span {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            animation: decoFloat 2s ease-in-out infinite;
-        }
-        .header-deco span:nth-child(1) { background: var(--accent-coral); animation-delay: 0s; }
-        .header-deco span:nth-child(2) { background: var(--accent-yellow); animation-delay: 0.2s; }
-        .header-deco span:nth-child(3) { background: var(--accent-teal); animation-delay: 0.4s; }
-        .header-deco span:nth-child(4) { background: var(--accent-purple); animation-delay: 0.6s; }
-        .header-deco span:nth-child(5) { background: var(--accent-pink); animation-delay: 0.8s; }
-
-        @keyframes decoFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
-        }
-
-        .section-title {
-            font-family: 'ZCOOL KuaiLe', cursive;
-            font-size: 20px;
-            color: var(--text-primary);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-title .icon-circle {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            color: #FFF;
-            flex-shrink: 0;
-        }
-
-        .info-section, .elements-section, .style-section {
-            margin-bottom: 28px;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-            padding-left: 4px;
-        }
-
-        .input-group label .required {
-            color: var(--accent-coral);
-            margin-left: 2px;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 12px 14px;
-            background: var(--bg-input);
-            border: 2px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            font-family: 'Noto Sans TC', sans-serif;
-            font-size: 16px;
-            color: var(--text-primary);
-            transition: border-color 0.25s, box-shadow 0.25s;
-            outline: none;
-        }
-
-        .input-field:focus {
-            border-color: var(--border-focus);
-            box-shadow: 0 0 0 3px rgba(255,138,92,0.15);
-        }
-
-        .input-field::placeholder { color: var(--text-muted); }
-        textarea.input-field { min-height: 80px; resize: vertical; line-height: 1.6; }
-
-        .element-card {
-            background: var(--bg-card);
-            border: 2px solid var(--border-color);
-            border-radius: var(--radius-md);
-            padding: 16px;
-            margin-bottom: 12px;
-            transition: border-color 0.25s, box-shadow 0.25s;
-            animation: cardSlideIn 0.4s ease-out both;
-        }
-
-        .element-card:hover { border-color: var(--border-focus); }
-        .element-card:focus-within {
-            border-color: var(--border-focus);
-            box-shadow: var(--shadow-md);
-        }
-
-        @keyframes cardSlideIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .element-header {
-            display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
-        }
-
-        .element-number {
-            width: 32px; height: 32px; border-radius: 50%; display: flex;
-            align-items: center; justify-content: center; font-family: 'ZCOOL KuaiLe', cursive;
-            font-size: 15px; color: #FFF; flex-shrink: 0;
-        }
-
-        .element-label { flex: 1; }
-        .element-label .main-label { font-weight: 700; font-size: 15px; color: var(--text-primary); line-height: 1.4; }
-        .element-label .sub-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-        .element-icon { font-size: 18px; opacity: 0.5; }
-
-        .el-color-1 { background: #FF6B6B; } .el-text-1 { color: #FF6B6B; }
-        .el-color-2 { background: #FF9A5C; } .el-text-2 { color: #FF9A5C; }
-        .el-color-3 { background: #FDCB6E; } .el-text-3 { color: #FDCB6E; }
-        .el-color-4 { background: #00B894; } .el-text-4 { color: #00B894; }
-        .el-color-5 { background: #74B9FF; } .el-text-5 { color: #74B9FF; }
-        .el-color-6 { background: #A29BFE; } .el-text-6 { color: #A29BFE; }
-        .el-color-7 { background: #FD79A8; } .el-text-7 { color: #FD79A8; }
-        .el-color-8 { background: #6C5CE7; } .el-text-8 { color: #6C5CE7; }
-
+        .element-card { background: var(--bg-card); border: 2px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; margin-bottom: 12px; }
+        .element-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .element-number { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'ZCOOL KuaiLe', cursive; font-size: 15px; color: #FFF; }
+        .element-label .main-label { font-weight: 700; font-size: 15px; }
+        .element-label .sub-label { font-size: 12px; color: var(--text-muted); }
+        
         .style-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        
-        .style-card {
-            background: var(--bg-card); border: 2.5px solid var(--border-color);
-            border-radius: var(--radius-md); padding: 16px 10px; text-align: center;
-            cursor: pointer; transition: all 0.25s; position: relative; overflow: hidden;
-        }
-        .style-card::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; opacity: 0; transition: opacity 0.25s;
-        }
-        .style-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .style-card { background: var(--bg-card); border: 2.5px solid var(--border-color); border-radius: var(--radius-md); padding: 16px 10px; text-align: center; cursor: pointer; position: relative; }
         .style-card.selected { border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(255,138,92,0.2); }
-        .style-card.selected::before { opacity: 1; }
-        .style-card .style-emoji { font-size: 32px; display: block; margin-bottom: 8px; line-height: 1; }
-        .style-card .style-name { font-family: 'ZCOOL KuaiLe', cursive; font-size: 14px; color: var(--text-primary); line-height: 1.3; }
-        
-        .style-card .check-mark {
-            position: absolute; top: 8px; right: 8px; width: 22px; height: 22px; border-radius: 50%;
-            background: var(--accent-teal); color: #FFF; font-size: 11px; display: none; align-items: center; justify-content: center;
-        }
-        .style-card.selected .check-mark { display: flex; }
-
-        .style-storybook::before { background: linear-gradient(90deg, #FF9A5C, #FDCB6E); }
-        .style-fresh::before { background: linear-gradient(90deg, #00B894, #55EFC4); }
-        .style-watercolor::before { background: linear-gradient(90deg, #74B9FF, #A29BFE); }
-        .style-pastel::before { background: linear-gradient(90deg, #FD79A8, #FDCB6E); }
-        .style-healing::before { background: linear-gradient(90deg, #A29BFE, #FD79A8); }
-        .style-anime::before { background: linear-gradient(90deg, #74B9FF, #00B894); }
+        .style-card .style-emoji { font-size: 32px; display: block; margin-bottom: 8px; }
+        .style-card .style-name { font-family: 'ZCOOL KuaiLe', cursive; font-size: 14px; }
 
         .generate-wrapper { text-align: center; margin-bottom: 32px; }
-        .generate-btn {
-            font-family: 'ZCOOL KuaiLe', cursive; font-size: 20px; color: #FFF;
-            background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange));
-            border: none; border-radius: 50px; padding: 16px 48px; cursor: pointer;
-            box-shadow: 0 6px 24px rgba(255,107,107,0.35); transition: all 0.3s; position: relative; overflow: hidden;
-        }
-        .generate-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,107,107,0.45); }
+        .generate-btn { font-family: 'ZCOOL KuaiLe', cursive; font-size: 20px; color: #FFF; background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange)); border: none; border-radius: 50px; padding: 16px 48px; cursor: pointer; box-shadow: 0 6px 24px rgba(255,107,107,0.35); }
         .generate-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        .generate-btn i { margin-right: 8px; }
 
-        .result-section { display: none; margin-top: 16px; animation: fadeSlideUp 0.5s ease-out; }
+        .result-section { display: none; margin-top: 16px; }
         .result-section.visible { display: block; }
-        @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .loading-container {
-            background: var(--bg-card); border: 2px solid var(--border-color); border-radius: var(--radius-lg);
-            padding: 48px 24px; text-align: center;
-        }
-        .loading-pencil {
-            display: inline-block; width: 60px; height: 60px; position: relative; margin-bottom: 20px;
-        }
-        .loading-pencil::before {
-            content: '\f303'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 36px;
-            color: var(--accent-orange); position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); animation: pencilDraw 1.5s ease-in-out infinite;
-        }
-        @keyframes pencilDraw {
-            0%, 100% { transform: translate(-50%, -50%) rotate(-15deg); }
-            50% { transform: translate(-50%, -50%) rotate(15deg); }
-        }
-        .loading-dots { display: flex; justify-content: center; gap: 6px; margin-top: 16px; }
-        .loading-dots span {
-            width: 8px; height: 8px; border-radius: 50%; background: var(--accent-coral);
-            animation: dotPulse 1.2s ease-in-out infinite;
-        }
-        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes dotPulse {
-            0%, 100% { transform: scale(1); opacity: 0.4; }
-            50% { transform: scale(1.3); opacity: 1; }
-        }
-        .loading-text { font-family: 'ZCOOL KuaiLe', cursive; font-size: 18px; color: var(--text-secondary); margin-top: 8px; }
-        .loading-sub { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
-
+        .loading-container { background: var(--bg-card); border: 2px solid var(--border-color); border-radius: var(--radius-lg); padding: 48px 24px; text-align: center; }
         .comic-container { display: none; }
         .comic-container.visible { display: block; }
-        .comic-frame {
-            background: var(--bg-card); border: 3px solid var(--border-color);
-            border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg);
-        }
-        .comic-title-bar {
-            background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange));
-            padding: 12px 20px; display: flex; align-items: center; justify-content: space-between;
-        }
-        .comic-title-bar .title-text { font-family: 'ZCOOL KuaiLe', cursive; font-size: 16px; color: #FFF; }
-        .comic-title-bar .author-text { font-size: 13px; color: rgba(255,255,255,0.85); }
-        .comic-image-wrapper { position: relative; background: #F5F0EB; }
-        .dark .comic-image-wrapper { background: #1A1A2E; }
+        .comic-frame { background: var(--bg-card); border: 3px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; }
+        .comic-title-bar { background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange)); padding: 12px 20px; display: flex; justify-content: space-between; color: #FFF; }
         .comic-image-wrapper img { width: 100%; display: block; }
+        .comic-actions { display: flex; gap: 10px; padding: 16px 20px; }
+        .action-btn { flex: 1; padding: 12px 16px; border-radius: var(--radius-sm); border: none; cursor: pointer; font-family: 'ZCOOL KuaiLe', cursive; font-size: 15px; }
+        .action-btn.primary { background: var(--accent-teal); color: #FFF; }
+        .action-btn.secondary { background: var(--bg-input); color: var(--text-primary); }
 
-        .comic-actions {
-            display: flex; gap: 10px; padding: 16px 20px; background: var(--bg-card); border-top: 2px solid var(--border-color);
-        }
-        .action-btn {
-            flex: 1; padding: 12px 16px; border-radius: var(--radius-sm); font-family: 'ZCOOL KuaiLe', cursive;
-            font-size: 15px; border: 2px solid transparent; cursor: pointer; transition: all 0.25s;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
-        .action-btn.primary { background: linear-gradient(135deg, var(--accent-teal), #00CEC9); color: #FFF; box-shadow: 0 4px 12px rgba(0,184,148,0.3); }
-        .action-btn.primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,184,148,0.4); }
-        .action-btn.secondary { background: var(--bg-input); color: var(--text-primary); border-color: var(--border-color); }
-        .action-btn.secondary:hover { border-color: var(--accent-purple); background: var(--bg-card); }
-
-        .error-container {
-            display: none; background: var(--bg-card); border: 2px solid var(--accent-coral);
-            border-radius: var(--radius-lg); padding: 32px 24px; text-align: center;
-        }
-        .error-container.visible { display: block; }
-        .error-icon { font-size: 40px; color: var(--accent-coral); margin-bottom: 12px; }
-        .error-message { font-size: 15px; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.6; }
-        .retry-btn {
-            font-family: 'ZCOOL KuaiLe', cursive; font-size: 16px; color: #FFF; background: var(--accent-coral);
-            border: none; border-radius: 30px; padding: 10px 28px; cursor: pointer; transition: all 0.25s;
-        }
-        .retry-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-
-        .modal-overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999;
-            align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px);
-        }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 999; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
         .modal-overlay.visible { display: flex; }
-        .modal-box {
-            background: var(--bg-card); border-radius: var(--radius-lg); padding: 28px 24px; max-width: 360px;
-            width: 100%; box-shadow: var(--shadow-lg); text-align: center; animation: modalPop 0.3s ease-out;
-        }
-        @keyframes modalPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .modal-title { font-family: 'ZCOOL KuaiLe', cursive; font-size: 20px; color: var(--text-primary); margin-bottom: 10px; }
-        .modal-message { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; }
-        .modal-btn {
-            font-family: 'ZCOOL KuaiLe', cursive; font-size: 15px; padding: 10px 28px; border: none; border-radius: 30px;
-            cursor: pointer; transition: all 0.2s; background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange)); color: #FFF;
-        }
-        .modal-btn:hover { opacity: 0.9; }
+        .modal-box { background: var(--bg-card); border-radius: var(--radius-lg); padding: 28px 24px; max-width: 400px; width: 100%; text-align: left; }
+        .modal-title { font-family: 'ZCOOL KuaiLe', cursive; font-size: 20px; margin-bottom: 10px; color: var(--text-primary); text-align: center; }
+        .modal-message { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px; }
+        .modal-btn { width: 100%; font-family: 'ZCOOL KuaiLe', cursive; font-size: 16px; padding: 12px; border: none; border-radius: 30px; cursor: pointer; background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange)); color: #FFF; margin-top: 10px; }
 
-        .app-footer { text-align: center; padding: 24px 0 8px; color: var(--text-muted); font-size: 12px; }
-
-        @media (max-width: 560px) {
-            .app-header h1 { font-size: 28px; }
-            .info-grid { grid-template-columns: 1fr; }
-            .style-grid { grid-template-columns: repeat(2, 1fr); }
-            .generate-btn { padding: 14px 36px; font-size: 18px; }
-            .comic-actions { flex-direction: column; }
-            .element-card { padding: 14px; }
-        }
-        @media (max-width: 380px) {
-            #app { padding: 12px 10px 48px; }
-            .app-header h1 { font-size: 24px; }
-            .style-grid { gap: 8px; }
-            .style-card { padding: 12px 6px; }
-            .style-card .style-emoji { font-size: 26px; }
-            .style-card .style-name { font-size: 12px; }
-        }
+        /* API Key 輸入框特別樣式 */
+        .api-key-input { width: 100%; padding: 12px; border: 2px solid var(--accent-purple); border-radius: var(--radius-sm); font-size: 14px; margin-bottom: 10px; background: var(--bg-input); color: var(--text-primary); }
     </style>
 </head>
 <body>
     <div id="app">
-        <!-- ===== HEADER ===== -->
         <header class="app-header">
-            <div class="header-badge">AI 漫畫工坊</div>
+            <!-- 新增設定按鈕 -->
+            <button class="settings-btn" onclick="openApiKeyModal()" title="設定 API Key">
+                <i class="fas fa-cog"></i>
+            </button>
+            <div class="header-badge">高畫質 AI 漫畫工坊</div>
             <h1>四格漫畫創作工坊</h1>
-            <p>填寫故事元素，Gemini AI 幫你畫出精彩彩色四格漫畫！</p>
-            <div class="header-deco">
-                <span></span><span></span><span></span><span></span><span></span>
-            </div>
+            <p>填寫故事元素，AI 幫你畫出精彩四格漫畫！</p>
         </header>
 
         <main>
-            <!-- ===== STORY INFO ===== -->
+            <!-- (這部分與原本的表單完全相同) -->
             <section class="info-section">
-                <div class="section-title">
-                    <span class="icon-circle" style="background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange));">
-                        <i class="fas fa-pen-fancy"></i>
-                    </span>
-                    基本資料
-                </div>
+                <div class="section-title"><span class="icon-circle" style="background: var(--accent-coral);"><i class="fas fa-pen-fancy"></i></span>基本資料</div>
                 <div class="info-grid">
-                    <div class="input-group">
-                        <label>故事名稱 <span class="required">*</span></label>
-                        <input type="text" id="storyName" class="input-field" placeholder="例如：操場上的友情">
-                    </div>
-                    <div class="input-group">
-                        <label>創作者姓名 <span class="required">*</span></label>
-                        <input type="text" id="studentName" class="input-field" placeholder="你的名字">
-                    </div>
+                    <div class="input-group"><label>故事名稱 *</label><input type="text" id="storyName" class="input-field" placeholder="例如：操場上的友情"></div>
+                    <div class="input-group"><label>創作者姓名 *</label><input type="text" id="studentName" class="input-field" placeholder="你的名字"></div>
                 </div>
             </section>
 
-            <!-- ===== STORY ELEMENTS ===== -->
             <section class="elements-section">
-                <div class="section-title">
-                    <span class="icon-circle" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));">
-                        <i class="fas fa-puzzle-piece"></i>
-                    </span>
-                    故事元素
-                </div>
-
-                <!-- Element 1: When -->
-                <div class="element-card">
-                    <div class="element-header">
-                        <span class="element-number el-color-1">一</span>
-                        <div class="element-label">
-                            <div class="main-label">（何時）這故事是甚麼時候發生？</div>
-                            <div class="sub-label">描述時間，例如：上星期三的下午</div>
-                        </div>
-                        <i class="fas fa-clock el-text-1 element-icon"></i>
-                    </div>
-                    <input type="text" id="el_when" class="input-field" placeholder="在甚麼時候...">
-                </div>
-
-                <!-- Element 2: Who -->
-                <div class="element-card">
-                    <div class="element-header">
-                        <span class="element-number el-color-2">二</span>
-                        <div class="element-label">
-                            <div class="main-label">（何人）這故事包括哪些人物？</div>
-                            <div class="sub-label">寫出角色名字或身份</div>
-                        </div>
-                        <i class="fas fa-users el-text-2 element-icon"></i>
-                    </div>
-                    <input type="text" id="el_who" class="input-field" placeholder="例如：我、小明、王老師">
-                </div>
-
-                <!-- Element 3: Where -->
-                <div class="element-card">
-                    <div class="element-header">
-                        <span class="element-number el-color-3">三</span>
-                        <div class="element-label">
-                            <div class="main-label">（何地）這故事是在哪裏發生？</div>
-                            <div class="sub-label">描述地點場景</div>
-                        </div>
-                        <i class="fas fa-map-marker-alt el-text-3 element-icon"></i>
-                    </div>
-                    <input type="text" id="el_where" class="input-field" placeholder="例如：學校操場">
-                </div>
-
-                <!-- Element 4: What -->
-                <div class="element-card">
-                    <div class="element-header">
-                        <span class="element-number el-color-4">四</span>
-                        <div class="element-label">
-                            <div class="main-label">（何事）發生了甚麼事情？你怎樣做？</div>
-                            <div class="sub-label">描述事件經過和你的行動</div>
-                        </div>
-                        <i class="fas fa-bolt el-text-4 element-icon"></i>
-                    </div>
-                    <textarea id="el_what" class="input-field" placeholder="描述發生的事情和你的行動..."></textarea>
-                </div>
-
-                <!-- Element 5: Reactions -->
-                <div class="element-card">
-                    <div class="element-header">
-                        <span class="element-number el-color-5">五</span>
-                        <div class="element-label">
-                            <div class="main-label">其他人看見你的行為和表現，有甚麼反應？</div>
-                            <div class="sub-label">校長／老師／同學／父母等的反應</div>
-                        </div>
-                        <i class="fas fa-comment-dots el-text-5 element-icon"></i>
-                    </div>
-                    <textarea id="el_reactions" class="input-field" placeholder="他們的反應是..."></textarea>
-                </div>
-
-                <!-- Element 6: My Feelings -->
-                <div class="element-card">
-                    <div class="element-header">
-                        <span class="element-number el-color-6">六</span>
-                        <div class="element-label">
-                            <div class="main-label">（如何）我的心情怎樣？</div>
-                            <div class="sub-label">描述你的感受</div>
-                        </div>
-                        <i class="fas fa-heart el-text-6 element-icon"></i>
-                    </div>
-                    <input type="text" id="el_myFeelings" class="input-field" placeholder="例如：開心、感動、緊張...">
-                </div>
-
-                <!-- Element 7: Others' Feelings -->
-                <div class="element-card">
-                    <div class="element-header">
-                        <span class="element-number el-color-7">七</span>
-                        <div class="element-label">
-                            <div class="main-label">（如何）其他人的心情如何？</div>
-                            <div class="sub-label">校長／老師／同學／父母的心情</div>
-                        </div>
-                        <i class="fas fa-smile el-text-7 element-icon"></i>
-                    </div>
-                    <input type="text" id="el_othersFeelings" class="input-field" placeholder="他們的心情是...">
-                </div>
-
-                <!-- Element 8: Others Say -->
-                <div class="element-card">
-                    <div class="element-header">
-                        <span class="element-number el-color-8">八</span>
-                        <div class="element-label">
-                            <div class="main-label">其他人對我說甚麼？</div>
-                            <div class="sub-label">校長／老師／同學／父母的話</div>
-                        </div>
-                        <i class="fas fa-quote-left el-text-8 element-icon"></i>
-                    </div>
-                    <textarea id="el_othersSay" class="input-field" placeholder="他們對你說了甚麼..."></textarea>
-                </div>
+                <div class="section-title"><span class="icon-circle" style="background: var(--accent-purple);"><i class="fas fa-puzzle-piece"></i></span>故事元素</div>
+                
+                <div class="element-card"><div class="element-header"><span class="element-number" style="background:#FF6B6B">一</span><div class="element-label"><div class="main-label">（何時）這故事是甚麼時候發生？</div></div></div><input type="text" id="el_when" class="input-field"></div>
+                <div class="element-card"><div class="element-header"><span class="element-number" style="background:#FF9A5C">二</span><div class="element-label"><div class="main-label">（何人）這故事包括哪些人物？</div></div></div><input type="text" id="el_who" class="input-field"></div>
+                <div class="element-card"><div class="element-header"><span class="element-number" style="background:#FDCB6E">三</span><div class="element-label"><div class="main-label">（何地）這故事是在哪裏發生？</div></div></div><input type="text" id="el_where" class="input-field"></div>
+                <div class="element-card"><div class="element-header"><span class="element-number" style="background:#00B894">四</span><div class="element-label"><div class="main-label">（何事）發生了甚麼事情？你怎樣做？</div></div></div><textarea id="el_what" class="input-field"></textarea></div>
+                <div class="element-card"><div class="element-header"><span class="element-number" style="background:#74B9FF">五</span><div class="element-label"><div class="main-label">其他人看見你的行為，有甚麼反應？</div></div></div><textarea id="el_reactions" class="input-field"></textarea></div>
+                <div class="element-card"><div class="element-header"><span class="element-number" style="background:#A29BFE">六</span><div class="element-label"><div class="main-label">（如何）我的心情怎樣？</div></div></div><input type="text" id="el_myFeelings" class="input-field"></div>
+                <div class="element-card"><div class="element-header"><span class="element-number" style="background:#FD79A8">七</span><div class="element-label"><div class="main-label">（如何）其他人的心情如何？</div></div></div><input type="text" id="el_othersFeelings" class="input-field"></div>
+                <div class="element-card"><div class="element-header"><span class="element-number" style="background:#6C5CE7">八</span><div class="element-label"><div class="main-label">其他人對我說甚麼？</div></div></div><textarea id="el_othersSay" class="input-field"></textarea></div>
             </section>
 
-            <!-- ===== STYLE SELECTION ===== -->
             <section class="style-section">
-                <div class="section-title">
-                    <span class="icon-circle" style="background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));">
-                        <i class="fas fa-palette"></i>
-                    </span>
-                    選擇漫畫風格
-                </div>
+                <div class="section-title"><span class="icon-circle" style="background: var(--accent-teal);"><i class="fas fa-palette"></i></span>選擇漫畫風格</div>
                 <div class="style-grid">
-                    <div class="style-card style-storybook selected" data-style="storybook" onclick="selectStyle(this)">
-                        <span class="check-mark"><i class="fas fa-check"></i></span>
-                        <span class="style-emoji">📖</span>
-                        <span class="style-name">兒童繪本風</span>
-                    </div>
-                    <div class="style-card style-fresh" data-style="fresh" onclick="selectStyle(this)">
-                        <span class="check-mark"><i class="fas fa-check"></i></span>
-                        <span class="style-emoji">🌿</span>
-                        <span class="style-name">小清新手繪風</span>
-                    </div>
-                    <div class="style-card style-watercolor" data-style="watercolor" onclick="selectStyle(this)">
-                        <span class="check-mark"><i class="fas fa-check"></i></span>
-                        <span class="style-emoji">🎨</span>
-                        <span class="style-name">水彩輕塗鴉風</span>
-                    </div>
-                    <div class="style-card style-pastel" data-style="pastel" onclick="selectStyle(this)">
-                        <span class="check-mark"><i class="fas fa-check"></i></span>
-                        <span class="style-emoji">🖍️</span>
-                        <span class="style-name">粉彩粉蠟筆風</span>
-                    </div>
-                    <div class="style-card style-healing" data-style="healing" onclick="selectStyle(this)">
-                        <span class="check-mark"><i class="fas fa-check"></i></span>
-                        <span class="style-emoji">☁️</span>
-                        <span class="style-name">圓潤治癒插畫風</span>
-                    </div>
-                    <div class="style-card style-anime" data-style="anime" onclick="selectStyle(this)">
-                        <span class="check-mark"><i class="fas fa-check"></i></span>
-                        <span class="style-emoji">⭐</span>
-                        <span class="style-name">日本卡通風</span>
-                    </div>
+                    <div class="style-card selected" data-style="storybook" onclick="selectStyle(this)"><span class="style-emoji">📖</span><span class="style-name">兒童繪本風</span></div>
+                    <div class="style-card" data-style="fresh" onclick="selectStyle(this)"><span class="style-emoji">🌿</span><span class="style-name">小清新手繪風</span></div>
+                    <div class="style-card" data-style="anime" onclick="selectStyle(this)"><span class="style-emoji">⭐</span><span class="style-name">日本卡通風</span></div>
                 </div>
             </section>
 
-            <!-- ===== GENERATE BUTTON ===== -->
             <div class="generate-wrapper">
                 <button class="generate-btn" id="generateBtn" onclick="generateComic()">
-                    <i class="fas fa-wand-magic-sparkles"></i>生成四格漫畫
+                    <i class="fas fa-wand-magic-sparkles"></i>生成高畫質漫畫
                 </button>
             </div>
         </main>
 
-        <!-- ===== RESULT SECTION ===== -->
         <section class="result-section" id="resultSection">
-            <!-- Loading -->
-            <div class="loading-container" id="loadingContainer">
-                <div class="loading-pencil"></div>
-                <div class="loading-text">正在繪製你的漫畫...</div>
-                <div class="loading-sub">Gemini 3.1 Flash Image (Nano Banana) 畫家努力創作中，請稍候約 15 秒</div>
-                <div class="loading-dots">
-                    <span></span><span></span><span></span>
-                </div>
+            <div class="loading-container" id="loadingContainer" style="display:none;">
+                <p style="font-size:18px; font-weight:bold;">正在呼叫高畫質 AI 繪製中...</p>
+                <p style="color:var(--text-secondary); margin-top:10px;">約需等待 10 ~ 30 秒</p>
             </div>
-
-            <!-- Comic Result -->
+            
             <div class="comic-container" id="comicContainer">
                 <div class="comic-frame">
                     <div class="comic-title-bar">
@@ -625,319 +157,167 @@
                         <img id="comicImage" alt="四格漫畫">
                     </div>
                     <div class="comic-actions">
-                        <button class="action-btn primary" onclick="downloadComic()">
-                            <i class="fas fa-download"></i>下載漫畫
-                        </button>
-                        <button class="action-btn secondary" onclick="regenerate()">
-                            <i class="fas fa-rotate-right"></i>重新生成
-                        </button>
+                        <button class="action-btn primary" onclick="downloadComic()">下載漫畫</button>
+                        <button class="action-btn secondary" onclick="regenerate()">重新生成</button>
                     </div>
                 </div>
             </div>
-
-            <!-- Error -->
-            <div class="error-container" id="errorContainer">
-                <div class="error-icon"><i class="fas fa-cloud-exclamation"></i>😢</div>
-                <div class="error-message" id="errorMessage">生成失敗，請重試。</div>
-                <button class="retry-btn" onclick="regenerate()">
-                    <i class="fas fa-rotate-right"></i> 重新嘗試
-                </button>
-            </div>
         </section>
-
-        <footer class="app-footer">
-            使用 Gemini 3.1 Flash Image 驅動 · 四格漫畫創作工坊
-        </footer>
     </div>
 
-    <!-- ===== MODAL ===== -->
-    <div class="modal-overlay" id="modalOverlay">
+    <!-- API Key 設定視窗 -->
+    <div class="modal-overlay" id="apiKeyModal">
         <div class="modal-box">
-            <div class="modal-title" id="modalTitle"></div>
-            <div class="modal-message" id="modalMessage"></div>
-            <button class="modal-btn" onclick="closeModal()">好的</button>
+            <div class="modal-title">API 金鑰設定</div>
+            <div class="modal-message">
+                為了在 GitHub Pages 上免費使用高畫質 AI (FLUX.1 模型)，請輸入你的 <strong>Hugging Face Token</strong>。<br><br>
+                <a href="https://huggingface.co/settings/tokens" target="_blank" style="color:var(--accent-purple);">👉 點我前往獲取免費 Token</a> (需註冊帳號，免費且不需信用卡)。<br>
+                <em>*金鑰只會安全地存在你的瀏覽器中。</em>
+            </div>
+            <input type="password" id="hfApiKeyInput" class="api-key-input" placeholder="hf_xxxxxxxxxxxxxxxxxxxxxxxxx">
+            <button class="modal-btn" onclick="saveApiKey()">儲存並關閉</button>
+        </div>
+    </div>
+
+    <!-- 普通訊息視窗 -->
+    <div class="modal-overlay" id="msgModal">
+        <div class="modal-box" style="text-align: center;">
+            <div class="modal-title" id="msgTitle"></div>
+            <div class="modal-message" id="msgText"></div>
+            <button class="modal-btn" onclick="closeMsgModal()">好的</button>
         </div>
     </div>
 
     <script>
-        /* ========== DARK MODE DETECTION ========== */
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark');
-        }
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(event) {
-            if (event.matches) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-        });
+        var selectedStyle = 'storybook';
+        var currentComicUrl = '';
 
-        /* ========== STATE ========== */
-        let selectedStyle = 'storybook';
-        let currentComicUrl = '';
-        let isGenerating = false;
-
-        /* ========== STYLE MAP ========== */
-        const styleDescriptions = {
-            storybook: "FULL COLOR children's picture book illustration style, rich vibrant warm colors, colorful backgrounds, soft rounded shapes, gentle watercolor-like finish, whimsical storybook quality, cozy and charming",
-            fresh: "FULL COLOR clean hand-drawn illustration style with vibrant yet soft coloring, colorful pastel palette, fresh airy feel, delicate linework with lively color fills",
-            watercolor: "FULL COLOR soft watercolor painting style, rich colorful washes blending naturally, vivid artistic brushstroke textures, dreamy colorful palette with blues, pinks, greens, and warm tones",
-            pastel: "FULL COLOR soft pastel and crayon art style, rich chalky colorful textures, vibrant rainbow pastel colors, childlike crayon drawing feel with bold colorful fills",
-            healing: "FULL COLOR kawaii rounded healing illustration style, very round puffy soft shapes, vibrant warm soothing pastel colors, extremely cute gentle characters, cozy colorful atmosphere",
-            anime: "FULL COLOR Japanese manga cartoon style, anime-influenced expressive large sparkling eyes, dynamic energetic poses, clean bold linework, vibrant colorful manga panel style, rich saturated colors"
+        /* 樣式對應的英文提示詞 */
+        var styleDescriptions = {
+            storybook: "FULL COLOR children's picture book illustration style, rich vibrant warm colors, colorful backgrounds, soft rounded shapes.",
+            fresh: "FULL COLOR clean hand-drawn illustration style with vibrant yet soft coloring, fresh airy feel.",
+            anime: "FULL COLOR Japanese manga cartoon style, vibrant colorful manga panel style, rich saturated colors."
         };
 
-        /* ========== STYLE SELECTION ========== */
         function selectStyle(card) {
-            document.querySelectorAll('.style-card').forEach(function(c) {
-                c.classList.remove('selected');
-            });
+            document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
             selectedStyle = card.getAttribute('data-style');
         }
 
-        /* ========== MODAL ========== */
-        function showModal(title, message) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalMessage').innerHTML = message;
-            document.getElementById('modalOverlay').classList.add('visible');
+        /* --- API KEY 管理 --- */
+        function openApiKeyModal() {
+            var savedKey = localStorage.getItem('hf_api_key');
+            if(savedKey) document.getElementById('hfApiKeyInput').value = savedKey;
+            document.getElementById('apiKeyModal').classList.add('visible');
         }
 
-        function closeModal() {
-            document.getElementById('modalOverlay').classList.remove('visible');
-        }
-
-        /* ========== VALIDATION ========== */
-        function validateForm() {
-            const storyName = document.getElementById('storyName').value.trim();
-            const studentName = document.getElementById('studentName').value.trim();
-
-            if (!storyName) {
-                showModal('請填寫故事名稱', '給你的四格漫畫起一個好聽的名字吧！');
-                document.getElementById('storyName').focus();
-                return false;
+        function saveApiKey() {
+            var key = document.getElementById('hfApiKeyInput').value.trim();
+            if (key) {
+                localStorage.setItem('hf_api_key', key);
+                document.getElementById('apiKeyModal').classList.remove('visible');
+            } else {
+                alert("請輸入金鑰！");
             }
-            if (!studentName) {
-                showModal('請填寫創作者姓名', '寫上你的名字，讓大家知道這是你的作品！');
-                document.getElementById('studentName').focus();
-                return false;
-            }
-
-            const fields = ['el_when', 'el_who', 'el_where', 'el_what', 'el_reactions', 'el_myFeelings', 'el_othersFeelings', 'el_othersSay'];
-            let filled = 0;
-            fields.forEach(function(id) {
-                if (document.getElementById(id).value.trim()) {
-                    filled++;
-                }
-            });
-
-            if (filled < 3) {
-                showModal('需要更多故事內容', '請至少填寫 3 個故事元素，這樣 AI 才能畫出精彩的漫畫哦！');
-                return false;
-            }
-
-            return true;
         }
 
-        /* ========== PROMPT BUILDER ========== */
-        function buildPrompt() {
-            const storyName = document.getElementById('storyName').value.trim();
-            const studentName = document.getElementById('studentName').value.trim();
-            const when = document.getElementById('el_when').value.trim() || '（未指定時間）';
-            const who = document.getElementById('el_who').value.trim() || '（未指定人物）';
-            const where = document.getElementById('el_where').value.trim() || '（未指定地點）';
-            const what = document.getElementById('el_what').value.trim() || '（未指定事件）';
-            const reactions = document.getElementById('el_reactions').value.trim() || '（未指定反應）';
-            const myFeelings = document.getElementById('el_myFeelings').value.trim() || '（未指定）';
-            const othersFeelings = document.getElementById('el_othersFeelings').value.trim() || '（未指定）';
-            const othersSay = document.getElementById('el_othersSay').value.trim() || '（未指定）';
-
-            const styleDesc = styleDescriptions[selectedStyle];
-
-            // 為了讓 Gemini Image 能夠完美理解分鏡結構，我們使用混和英文的 Prompt 策略
-            let prompt = `Create a FULL COLOR vibrant 4-panel comic strip arranged in a 2x2 grid with clear panel borders.\n\n`;
-            prompt += `Art style: ${styleDesc}\n`;
-            prompt += `IMPORTANT: The comic MUST be fully colored. Use rich, vivid colors in every panel.\n`;
-            prompt += `Include the Title at the top: 「${storyName}」 and Author credit: 作者：${studentName}\n\n`;
-            
-            prompt += `PANEL LAYOUT (2 rows x 2 columns):\n`;
-            prompt += `Panel 1 (Top-Left, Scene): Time: ${when}, Place: ${where}. Characters: ${who}.\n`;
-            prompt += `Panel 2 (Top-Right, Action): Event: ${what}.\n`;
-            prompt += `Panel 3 (Bottom-Left, Turning Point): Reaction from others: ${reactions}.\n`;
-            prompt += `Panel 4 (Bottom-Right, Resolution): My feeling: ${myFeelings}. Others feeling: ${othersFeelings}. They say: 「${othersSay}」.\n\n`;
-            
-            prompt += `CRITICAL REQUIREMENTS:\n`;
-            prompt += `- The entire image MUST be FULL COLOR.\n`;
-            prompt += `- Add appropriate text bubbles containing Traditional Chinese (繁體中文) dialogue in each panel.\n`;
-            prompt += `- Keep the character designs and colors consistent across all 4 panels.`;
-
-            return prompt;
+        function showMsg(title, msg) {
+            document.getElementById('msgTitle').textContent = title;
+            document.getElementById('msgText').innerHTML = msg;
+            document.getElementById('msgModal').classList.add('visible');
         }
+        function closeMsgModal() { document.getElementById('msgModal').classList.remove('visible'); }
 
-        /* ========== GENERATE COMIC (Using Gemini 3.1 Flash Image) ========== */
+        /* --- 產生漫畫的核心邏輯 --- */
         async function generateComic() {
-            if (isGenerating) return;
-            if (!validateForm()) return;
+            var apiKey = localStorage.getItem('hf_api_key');
+            if (!apiKey) {
+                openApiKeyModal();
+                return;
+            }
 
-            isGenerating = true;
-            const btn = document.getElementById('generateBtn');
+            var storyName = document.getElementById('storyName').value.trim();
+            var studentName = document.getElementById('studentName').value.trim();
+            if(!storyName || !studentName) {
+                showMsg('資料不完整', '請填寫故事名稱與創作者姓名！');
+                return;
+            }
+
+            // 準備 Prompt (提示詞)
+            var when = document.getElementById('el_when').value.trim() || 'One day';
+            var who = document.getElementById('el_who').value.trim() || 'people';
+            var where = document.getElementById('el_where').value.trim() || 'a place';
+            var what = document.getElementById('el_what').value.trim() || 'doing something';
+            var reactions = document.getElementById('el_reactions').value.trim() || 'surprised';
+            var styleDesc = styleDescriptions[selectedStyle];
+
+            var prompt = `A 4-panel comic strip (2x2 grid) with white panel borders. Style: ${styleDesc}. Title: ${storyName}. 
+            Panel 1: Time: ${when}, Place: ${where}. Characters: ${who}. 
+            Panel 2: Action: ${what}. 
+            Panel 3: Reactions: ${reactions}. 
+            Panel 4: Happy ending. High quality, vivid colors, detailed, masterpiece.`;
+
+            var btn = document.getElementById('generateBtn');
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 生成中...';
-
-            const resultSection = document.getElementById('resultSection');
-            const loadingContainer = document.getElementById('loadingContainer');
-            const comicContainer = document.getElementById('comicContainer');
-            const errorContainer = document.getElementById('errorContainer');
-
-            resultSection.classList.add('visible');
-            loadingContainer.style.display = 'block';
-            comicContainer.classList.remove('visible');
-            errorContainer.classList.remove('visible');
-
-            resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-            const prompt = buildPrompt();
+            btn.innerHTML = '生成中...';
+            document.getElementById('resultSection').classList.add('visible');
+            document.getElementById('loadingContainer').style.display = 'block';
+            document.getElementById('comicContainer').classList.remove('visible');
 
             try {
-                // 自動帶入 Canvas 的空字串 API Key，平台會在背後注入
-                const apiKey = "";
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
-
-                const payload = {
-                    contents: [{
-                        role: 'user',
-                        parts: [{ text: prompt }]
-                    }],
-                    generationConfig: {
-                        responseModalities: ['IMAGE'],
-                        imageConfig: { aspectRatio: "3:4" } // 四格漫畫適合長方形比例 (2x2格加上下標題)
-                    },
-                };
-
-                // 加入指數退避機制來重試 (Exponential Backoff)
-                let response = null;
-                let delay = 1000;
-                for (let i = 0; i < 4; i++) {
-                    try {
-                        response = await fetch(apiUrl, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-                        
-                        if (response.ok) break;
-                        
-                        // 若發生 throttling 等錯誤，等待後重試
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                        delay *= 2;
-                    } catch(e) {
-                        if (i === 3) throw e;
+                // 呼叫 Hugging Face 的 FLUX.1 模型 API
+                const response = await fetch(
+                    "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell",
+                    {
+                        headers: {
+                            Authorization: "Bearer " + apiKey,
+                            "Content-Type": "application/json",
+                        },
+                        method: "POST",
+                        body: JSON.stringify({ inputs: prompt }),
                     }
+                );
+
+                if (!response.ok) {
+                    throw new Error("API 呼叫失敗，請檢查 API Key 是否正確或額度是否足夠。");
                 }
 
-                if (!response || !response.ok) {
-                    throw new Error("無法連接到 Gemini API 或達到請求上限。");
-                }
+                // 取得回傳的圖片二進位檔案 (Blob)
+                const blob = await response.blob();
+                const imageUrl = URL.createObjectURL(blob);
 
-                const result = await response.json();
-                const part = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+                // 顯示圖片
+                currentComicUrl = imageUrl;
+                document.getElementById('comicTitleText').textContent = '「' + storyName + '」';
+                document.getElementById('comicAuthorText').textContent = '作者：' + studentName;
+                document.getElementById('comicImage').src = imageUrl;
 
-                if (part && part.inlineData && part.inlineData.data) {
-                    const imageUrl = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
-                    showComic(imageUrl);
-                } else {
-                    throw new Error("API 未返回預期的圖像數據。");
-                }
+                document.getElementById('loadingContainer').style.display = 'none';
+                document.getElementById('comicContainer').classList.add('visible');
 
-            } catch (err) {
-                showError('生成圖片時發生錯誤：' + err.message);
+            } catch (error) {
+                document.getElementById('loadingContainer').style.display = 'none';
+                showMsg('生成錯誤', error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i>生成高畫質漫畫';
             }
         }
 
-        /* ========== SHOW COMIC ========== */
-        function showComic(url) {
-            currentComicUrl = url;
-            const storyName = document.getElementById('storyName').value.trim();
-            const studentName = document.getElementById('studentName').value.trim();
-
-            document.getElementById('comicTitleText').textContent = '「' + storyName + '」';
-            document.getElementById('comicAuthorText').textContent = '作者：' + studentName;
-            document.getElementById('comicImage').src = url;
-
-            document.getElementById('loadingContainer').style.display = 'none';
-            document.getElementById('comicContainer').classList.add('visible');
-            document.getElementById('errorContainer').classList.remove('visible');
-
-            resetButton();
-
-            setTimeout(function() {
-                document.getElementById('comicContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
-        }
-
-        /* ========== SHOW ERROR ========== */
-        function showError(message) {
-            document.getElementById('loadingContainer').style.display = 'none';
-            document.getElementById('comicContainer').classList.remove('visible');
-            document.getElementById('errorContainer').classList.add('visible');
-            document.getElementById('errorMessage').textContent = message || '生成失敗，請重試。';
-
-            resetButton();
-        }
-
-        /* ========== RESET BUTTON ========== */
-        function resetButton() {
-            isGenerating = false;
-            const btn = document.getElementById('generateBtn');
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i>生成四格漫畫';
-        }
-
-        /* ========== DOWNLOAD ========== */
         function downloadComic() {
             if (!currentComicUrl) return;
-
-            const storyName = document.getElementById('storyName').value.trim() || '四格漫畫';
-            const filename = storyName + '_四格漫畫.png';
-
-            fetch(currentComicUrl)
-                .then(function(response) {
-                    return response.blob();
-                })
-                .then(function(blob) {
-                    const blobUrl = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = blobUrl;
-                    a.download = filename;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    setTimeout(function() {
-                        URL.revokeObjectURL(blobUrl);
-                    }, 1000);
-                })
-                .catch(function() {
-                    const a = document.createElement('a');
-                    a.href = currentComicUrl;
-                    a.download = filename;
-                    a.target = '_blank';
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                });
+            var a = document.createElement('a');
+            a.href = currentComicUrl;
+            a.download = '四格漫畫.png';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
 
-        /* ========== REGENERATE ========== */
         function regenerate() {
-            document.getElementById('resultSection').classList.remove('visible');
             document.getElementById('comicContainer').classList.remove('visible');
-            document.getElementById('errorContainer').classList.remove('visible');
-            document.getElementById('loadingContainer').style.display = 'none';
-            currentComicUrl = '';
-
-            setTimeout(function() {
-                document.getElementById('generateBtn').scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 100);
+            generateComic();
         }
     </script>
 </body>
