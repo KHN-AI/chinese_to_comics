@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>四格漫畫創作工坊</title>
+    <title>四格漫畫創作工坊 - Gemini Pro 版</title>
     <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
         :root {
             --bg-primary: #FFF8F0;
@@ -160,7 +161,7 @@
             flex-shrink: 0;
         }
 
-        .info-section {
+        .info-section, .elements-section, .style-section {
             margin-bottom: 28px;
         }
 
@@ -168,10 +169,6 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-        }
-
-        .input-group {
-            position: relative;
         }
 
         .input-group label {
@@ -206,19 +203,8 @@
             box-shadow: 0 0 0 3px rgba(255,138,92,0.15);
         }
 
-        .input-field::placeholder {
-            color: var(--text-muted);
-        }
-
-        textarea.input-field {
-            min-height: 80px;
-            resize: vertical;
-            line-height: 1.6;
-        }
-
-        .elements-section {
-            margin-bottom: 28px;
-        }
+        .input-field::placeholder { color: var(--text-muted); }
+        textarea.input-field { min-height: 80px; resize: vertical; line-height: 1.6; }
 
         .element-card {
             background: var(--bg-card);
@@ -230,10 +216,7 @@
             animation: cardSlideIn 0.4s ease-out both;
         }
 
-        .element-card:hover {
-            border-color: var(--border-focus);
-        }
-
+        .element-card:hover { border-color: var(--border-focus); }
         .element-card:focus-within {
             border-color: var(--border-focus);
             box-shadow: var(--shadow-md);
@@ -245,23 +228,13 @@
         }
 
         .element-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
+            display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
         }
 
         .element-number {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'ZCOOL KuaiLe', cursive;
-            font-size: 15px;
-            color: #FFF;
-            flex-shrink: 0;
+            width: 32px; height: 32px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 15px; color: #FFF; flex-shrink: 0;
         }
 
         .element-label { flex: 1; }
@@ -278,18 +251,12 @@
         .el-color-7 { background: #FD79A8; } .el-text-7 { color: #FD79A8; }
         .el-color-8 { background: #6C5CE7; } .el-text-8 { color: #6C5CE7; }
 
-        .style-section { margin-bottom: 32px; }
         .style-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        
         .style-card {
-            background: var(--bg-card);
-            border: 2.5px solid var(--border-color);
-            border-radius: var(--radius-md);
-            padding: 16px 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.25s;
-            position: relative;
-            overflow: hidden;
+            background: var(--bg-card); border: 2.5px solid var(--border-color);
+            border-radius: var(--radius-md); padding: 16px 10px; text-align: center;
+            cursor: pointer; transition: all 0.25s; position: relative; overflow: hidden;
         }
         .style-card::before {
             content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; opacity: 0; transition: opacity 0.25s;
@@ -298,7 +265,7 @@
         .style-card.selected { border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(255,138,92,0.2); }
         .style-card.selected::before { opacity: 1; }
         .style-card .style-emoji { font-size: 32px; display: block; margin-bottom: 8px; line-height: 1; }
-        .style-card .style-name { font-family: 'ZCOOL KuaiLe', cursive; font-size: 14px; color: var(--text-primary); }
+        .style-card .style-name { font-family: 'ZCOOL KuaiLe', cursive; font-size: 14px; color: var(--text-primary); line-height: 1.3; }
         
         .style-card .check-mark {
             position: absolute; top: 8px; right: 8px; width: 22px; height: 22px; border-radius: 50%;
@@ -318,7 +285,7 @@
             font-family: 'ZCOOL KuaiLe', cursive; font-size: 20px; color: #FFF;
             background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange));
             border: none; border-radius: 50px; padding: 16px 48px; cursor: pointer;
-            box-shadow: 0 6px 24px rgba(255,107,107,0.35); transition: all 0.3s;
+            box-shadow: 0 6px 24px rgba(255,107,107,0.35); transition: all 0.3s; position: relative; overflow: hidden;
         }
         .generate-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,107,107,0.45); }
         .generate-btn:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -329,8 +296,8 @@
         @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .loading-container {
-            background: var(--bg-card); border: 2px solid var(--border-color);
-            border-radius: var(--radius-lg); padding: 48px 24px; text-align: center;
+            background: var(--bg-card); border: 2px solid var(--border-color); border-radius: var(--radius-lg);
+            padding: 48px 24px; text-align: center;
         }
         .loading-pencil {
             display: inline-block; width: 60px; height: 60px; position: relative; margin-bottom: 20px;
@@ -340,7 +307,10 @@
             color: var(--accent-orange); position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%); animation: pencilDraw 1.5s ease-in-out infinite;
         }
-        @keyframes pencilDraw { 0%, 100% { transform: translate(-50%, -50%) rotate(-15deg); } 50% { transform: translate(-50%, -50%) rotate(15deg); } }
+        @keyframes pencilDraw {
+            0%, 100% { transform: translate(-50%, -50%) rotate(-15deg); }
+            50% { transform: translate(-50%, -50%) rotate(15deg); }
+        }
         .loading-dots { display: flex; justify-content: center; gap: 6px; margin-top: 16px; }
         .loading-dots span {
             width: 8px; height: 8px; border-radius: 50%; background: var(--accent-coral);
@@ -348,7 +318,10 @@
         }
         .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
         .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes dotPulse { 0%, 100% { transform: scale(1); opacity: 0.4; } 50% { transform: scale(1.3); opacity: 1; } }
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.3); opacity: 1; }
+        }
         .loading-text { font-family: 'ZCOOL KuaiLe', cursive; font-size: 18px; color: var(--text-secondary); margin-top: 8px; }
         .loading-sub { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
 
@@ -395,13 +368,13 @@
         .retry-btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
         .modal-overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-            z-index: 999; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px);
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999;
+            align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px);
         }
         .modal-overlay.visible { display: flex; }
         .modal-box {
-            background: var(--bg-card); border-radius: var(--radius-lg); padding: 28px 24px;
-            max-width: 360px; width: 100%; box-shadow: var(--shadow-lg); text-align: center; animation: modalPop 0.3s ease-out;
+            background: var(--bg-card); border-radius: var(--radius-lg); padding: 28px 24px; max-width: 360px;
+            width: 100%; box-shadow: var(--shadow-lg); text-align: center; animation: modalPop 0.3s ease-out;
         }
         @keyframes modalPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .modal-title { font-family: 'ZCOOL KuaiLe', cursive; font-size: 20px; color: var(--text-primary); margin-bottom: 10px; }
@@ -411,7 +384,7 @@
             cursor: pointer; transition: all 0.2s; background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange)); color: #FFF;
         }
         .modal-btn:hover { opacity: 0.9; }
-        
+
         .app-footer { text-align: center; padding: 24px 0 8px; color: var(--text-muted); font-size: 12px; }
 
         @media (max-width: 560px) {
@@ -438,7 +411,7 @@
         <header class="app-header">
             <div class="header-badge">AI 漫畫工坊</div>
             <h1>四格漫畫創作工坊</h1>
-            <p>填寫故事元素，AI 幫你畫出精彩四格漫畫！</p>
+            <p>填寫故事元素，Gemini AI 幫你畫出精彩彩色四格漫畫！</p>
             <div class="header-deco">
                 <span></span><span></span><span></span><span></span><span></span>
             </div>
@@ -635,7 +608,7 @@
             <div class="loading-container" id="loadingContainer">
                 <div class="loading-pencil"></div>
                 <div class="loading-text">正在繪製你的漫畫...</div>
-                <div class="loading-sub">AI 畫家正在努力創作中，請耐心等候幾秒鐘</div>
+                <div class="loading-sub">Gemini 3.1 Flash Image (Nano Banana) 畫家努力創作中，請稍候約 15 秒</div>
                 <div class="loading-dots">
                     <span></span><span></span><span></span>
                 </div>
@@ -673,7 +646,7 @@
         </section>
 
         <footer class="app-footer">
-            開源 AI 繪圖驅動 · 四格漫畫創作工坊
+            使用 Gemini 3.1 Flash Image 驅動 · 四格漫畫創作工坊
         </footer>
     </div>
 
@@ -700,18 +673,18 @@
         });
 
         /* ========== STATE ========== */
-        var selectedStyle = 'storybook';
-        var currentComicUrl = '';
-        var isGenerating = false;
+        let selectedStyle = 'storybook';
+        let currentComicUrl = '';
+        let isGenerating = false;
 
         /* ========== STYLE MAP ========== */
-        var styleDescriptions = {
-            storybook: "FULL COLOR children's picture book illustration style, rich vibrant warm colors, colorful backgrounds, soft rounded shapes, gentle watercolor-like finish, whimsical storybook quality, cozy and charming, every panel filled with beautiful colors",
-            fresh: "FULL COLOR clean hand-drawn illustration style with vibrant yet soft coloring, colorful pastel palette, fresh airy feel, delicate linework with lively color fills, bright and cheerful tones",
-            watercolor: "FULL COLOR soft watercolor painting style, rich colorful washes blending naturally, vivid artistic brushstroke textures, dreamy colorful palette with blues, pinks, greens, and warm tones throughout",
-            pastel: "FULL COLOR soft pastel and crayon art style, rich chalky colorful textures, vibrant rainbow pastel colors, childlike crayon drawing feel with bold colorful fills, warm and vivid",
-            healing: "FULL COLOR kawaii rounded healing illustration style, very round puffy soft shapes, vibrant warm soothing pastel colors, extremely cute gentle characters, cozy colorful atmosphere with rich backgrounds",
-            anime: "FULL COLOR Japanese manga cartoon style, anime-influenced expressive large sparkling eyes, dynamic energetic poses, clean bold linework, vibrant colorful manga panel style, rich saturated colors and colorful backgrounds"
+        const styleDescriptions = {
+            storybook: "FULL COLOR children's picture book illustration style, rich vibrant warm colors, colorful backgrounds, soft rounded shapes, gentle watercolor-like finish, whimsical storybook quality, cozy and charming",
+            fresh: "FULL COLOR clean hand-drawn illustration style with vibrant yet soft coloring, colorful pastel palette, fresh airy feel, delicate linework with lively color fills",
+            watercolor: "FULL COLOR soft watercolor painting style, rich colorful washes blending naturally, vivid artistic brushstroke textures, dreamy colorful palette with blues, pinks, greens, and warm tones",
+            pastel: "FULL COLOR soft pastel and crayon art style, rich chalky colorful textures, vibrant rainbow pastel colors, childlike crayon drawing feel with bold colorful fills",
+            healing: "FULL COLOR kawaii rounded healing illustration style, very round puffy soft shapes, vibrant warm soothing pastel colors, extremely cute gentle characters, cozy colorful atmosphere",
+            anime: "FULL COLOR Japanese manga cartoon style, anime-influenced expressive large sparkling eyes, dynamic energetic poses, clean bold linework, vibrant colorful manga panel style, rich saturated colors"
         };
 
         /* ========== STYLE SELECTION ========== */
@@ -736,8 +709,8 @@
 
         /* ========== VALIDATION ========== */
         function validateForm() {
-            var storyName = document.getElementById('storyName').value.trim();
-            var studentName = document.getElementById('studentName').value.trim();
+            const storyName = document.getElementById('storyName').value.trim();
+            const studentName = document.getElementById('studentName').value.trim();
 
             if (!storyName) {
                 showModal('請填寫故事名稱', '給你的四格漫畫起一個好聽的名字吧！');
@@ -750,8 +723,8 @@
                 return false;
             }
 
-            var fields = ['el_when', 'el_who', 'el_where', 'el_what', 'el_reactions', 'el_myFeelings', 'el_othersFeelings', 'el_othersSay'];
-            var filled = 0;
+            const fields = ['el_when', 'el_who', 'el_where', 'el_what', 'el_reactions', 'el_myFeelings', 'el_othersFeelings', 'el_othersSay'];
+            let filled = 0;
             fields.forEach(function(id) {
                 if (document.getElementById(id).value.trim()) {
                     filled++;
@@ -768,47 +741,53 @@
 
         /* ========== PROMPT BUILDER ========== */
         function buildPrompt() {
-            var storyName = document.getElementById('storyName').value.trim();
-            var studentName = document.getElementById('studentName').value.trim();
-            var when = document.getElementById('el_when').value.trim() || 'Unspecified time';
-            var who = document.getElementById('el_who').value.trim() || 'Unspecified people';
-            var where = document.getElementById('el_where').value.trim() || 'Unspecified location';
-            var what = document.getElementById('el_what').value.trim() || 'Unspecified action';
-            var reactions = document.getElementById('el_reactions').value.trim() || 'Unspecified reactions';
-            var myFeelings = document.getElementById('el_myFeelings').value.trim() || 'Unspecified feelings';
-            var othersFeelings = document.getElementById('el_othersFeelings').value.trim() || 'Unspecified feelings';
-            var othersSay = document.getElementById('el_othersSay').value.trim() || 'Unspecified words';
+            const storyName = document.getElementById('storyName').value.trim();
+            const studentName = document.getElementById('studentName').value.trim();
+            const when = document.getElementById('el_when').value.trim() || '（未指定時間）';
+            const who = document.getElementById('el_who').value.trim() || '（未指定人物）';
+            const where = document.getElementById('el_where').value.trim() || '（未指定地點）';
+            const what = document.getElementById('el_what').value.trim() || '（未指定事件）';
+            const reactions = document.getElementById('el_reactions').value.trim() || '（未指定反應）';
+            const myFeelings = document.getElementById('el_myFeelings').value.trim() || '（未指定）';
+            const othersFeelings = document.getElementById('el_othersFeelings').value.trim() || '（未指定）';
+            const othersSay = document.getElementById('el_othersSay').value.trim() || '（未指定）';
 
-            var styleDesc = styleDescriptions[selectedStyle];
+            const styleDesc = styleDescriptions[selectedStyle];
 
-            // 為確保外部免費 API 能順利執行，Prompt 使用英文建構以達最佳繪圖效果
-            var prompt = 'Create a FULL COLOR vibrant 4-panel comic strip (2x2 grid) with clear panel borders.\n';
-            prompt += 'Art style: ' + styleDesc + '\n';
-            prompt += 'Comic Title: ' + storyName + '\n';
+            // 為了讓 Gemini Image 能夠完美理解分鏡結構，我們使用混和英文的 Prompt 策略
+            let prompt = `Create a FULL COLOR vibrant 4-panel comic strip arranged in a 2x2 grid with clear panel borders.\n\n`;
+            prompt += `Art style: ${styleDesc}\n`;
+            prompt += `IMPORTANT: The comic MUST be fully colored. Use rich, vivid colors in every panel.\n`;
+            prompt += `Include the Title at the top: 「${storyName}」 and Author credit: 作者：${studentName}\n\n`;
             
-            prompt += 'Panel 1: Time: ' + when + ', Place: ' + where + '. Show characters: ' + who + '.\n';
-            prompt += 'Panel 2: Event: ' + what + '.\n';
-            prompt += 'Panel 3: Others reaction: ' + reactions + '.\n';
-            prompt += 'Panel 4: Resolution. My feeling: ' + myFeelings + ', Others feeling: ' + othersFeelings + ', They say: ' + othersSay + '.\n';
-            prompt += 'Make sure characters are cute, expressive, child-friendly, and consistent across all 4 panels.';
+            prompt += `PANEL LAYOUT (2 rows x 2 columns):\n`;
+            prompt += `Panel 1 (Top-Left, Scene): Time: ${when}, Place: ${where}. Characters: ${who}.\n`;
+            prompt += `Panel 2 (Top-Right, Action): Event: ${what}.\n`;
+            prompt += `Panel 3 (Bottom-Left, Turning Point): Reaction from others: ${reactions}.\n`;
+            prompt += `Panel 4 (Bottom-Right, Resolution): My feeling: ${myFeelings}. Others feeling: ${othersFeelings}. They say: 「${othersSay}」.\n\n`;
+            
+            prompt += `CRITICAL REQUIREMENTS:\n`;
+            prompt += `- The entire image MUST be FULL COLOR.\n`;
+            prompt += `- Add appropriate text bubbles containing Traditional Chinese (繁體中文) dialogue in each panel.\n`;
+            prompt += `- Keep the character designs and colors consistent across all 4 panels.`;
 
             return prompt;
         }
 
-        /* ========== GENERATE COMIC (Replaced for Generic Web API) ========== */
-        function generateComic() {
+        /* ========== GENERATE COMIC (Using Gemini 3.1 Flash Image) ========== */
+        async function generateComic() {
             if (isGenerating) return;
             if (!validateForm()) return;
 
             isGenerating = true;
-            var btn = document.getElementById('generateBtn');
+            const btn = document.getElementById('generateBtn');
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 生成中...';
 
-            var resultSection = document.getElementById('resultSection');
-            var loadingContainer = document.getElementById('loadingContainer');
-            var comicContainer = document.getElementById('comicContainer');
-            var errorContainer = document.getElementById('errorContainer');
+            const resultSection = document.getElementById('resultSection');
+            const loadingContainer = document.getElementById('loadingContainer');
+            const comicContainer = document.getElementById('comicContainer');
+            const errorContainer = document.getElementById('errorContainer');
 
             resultSection.classList.add('visible');
             loadingContainer.style.display = 'block';
@@ -817,36 +796,69 @@
 
             resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            var prompt = buildPrompt();
+            const prompt = buildPrompt();
 
             try {
-                // 使用免費開放的 pollinations.ai 進行繪圖（完美適用於前端 GitHub Pages）
-                // 產生亂數 seed 避免瀏覽器快取相同的圖
-                var seed = Math.floor(Math.random() * 9999999);
-                var encodedPrompt = encodeURIComponent(prompt);
-                // 產出 1024x1024 解析度的圖片
-                var imageUrl = 'https://image.pollinations.ai/prompt/' + encodedPrompt + '?width=1024&height=1024&nologo=true&seed=' + seed;
+                // 自動帶入 Canvas 的空字串 API Key，平台會在背後注入
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
 
-                // 預先載入圖片，確認載入完成才顯示
-                var img = new Image();
-                img.onload = function() {
+                const payload = {
+                    contents: [{
+                        role: 'user',
+                        parts: [{ text: prompt }]
+                    }],
+                    generationConfig: {
+                        responseModalities: ['IMAGE'],
+                        imageConfig: { aspectRatio: "3:4" } // 四格漫畫適合長方形比例 (2x2格加上下標題)
+                    },
+                };
+
+                // 加入指數退避機制來重試 (Exponential Backoff)
+                let response = null;
+                let delay = 1000;
+                for (let i = 0; i < 4; i++) {
+                    try {
+                        response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        
+                        if (response.ok) break;
+                        
+                        // 若發生 throttling 等錯誤，等待後重試
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        delay *= 2;
+                    } catch(e) {
+                        if (i === 3) throw e;
+                    }
+                }
+
+                if (!response || !response.ok) {
+                    throw new Error("無法連接到 Gemini API 或達到請求上限。");
+                }
+
+                const result = await response.json();
+                const part = result?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+
+                if (part && part.inlineData && part.inlineData.data) {
+                    const imageUrl = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
                     showComic(imageUrl);
-                };
-                img.onerror = function() {
-                    showError('生成圖片時發生錯誤，請重試。');
-                };
-                img.src = imageUrl;
+                } else {
+                    throw new Error("API 未返回預期的圖像數據。");
+                }
 
             } catch (err) {
-                showError('網路發生錯誤。');
+                showError('生成圖片時發生錯誤：' + err.message);
             }
         }
 
         /* ========== SHOW COMIC ========== */
         function showComic(url) {
             currentComicUrl = url;
-            var storyName = document.getElementById('storyName').value.trim();
-            var studentName = document.getElementById('studentName').value.trim();
+            const storyName = document.getElementById('storyName').value.trim();
+            const studentName = document.getElementById('studentName').value.trim();
 
             document.getElementById('comicTitleText').textContent = '「' + storyName + '」';
             document.getElementById('comicAuthorText').textContent = '作者：' + studentName;
@@ -876,7 +888,7 @@
         /* ========== RESET BUTTON ========== */
         function resetButton() {
             isGenerating = false;
-            var btn = document.getElementById('generateBtn');
+            const btn = document.getElementById('generateBtn');
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i>生成四格漫畫';
         }
@@ -885,16 +897,16 @@
         function downloadComic() {
             if (!currentComicUrl) return;
 
-            var storyName = document.getElementById('storyName').value.trim() || '四格漫畫';
-            var filename = storyName + '_四格漫畫.png';
+            const storyName = document.getElementById('storyName').value.trim() || '四格漫畫';
+            const filename = storyName + '_四格漫畫.png';
 
             fetch(currentComicUrl)
                 .then(function(response) {
                     return response.blob();
                 })
                 .then(function(blob) {
-                    var blobUrl = URL.createObjectURL(blob);
-                    var a = document.createElement('a');
+                    const blobUrl = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
                     a.href = blobUrl;
                     a.download = filename;
                     document.body.appendChild(a);
@@ -905,8 +917,7 @@
                     }, 1000);
                 })
                 .catch(function() {
-                    // 若有跨域問題則新分頁開啟
-                    var a = document.createElement('a');
+                    const a = document.createElement('a');
                     a.href = currentComicUrl;
                     a.download = filename;
                     a.target = '_blank';
