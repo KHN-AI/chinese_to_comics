@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>四格漫畫創作工坊</title>
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #FFF8F0;
+            --bg-secondary: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --bg-input: #FFF5EB;
+            --text-primary: #2D3436;
+            --text-secondary: #636E72;
+            --text-muted: #B2BEC3;
+            --border-color: #F0E6DA;
+            --border-focus: #FF8A5C;
+            --accent-coral: #FF6B6B;
+            --accent-teal: #00B894;
+            --accent-yellow: #FDCB6E;
+            --accent-purple: #A29BFE;
+            --accent-pink: #FD79A8;
+            --accent-blue: #74B9FF;
+            --accent-orange: #FF9A5C;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --grid-color: rgba(0,0,0,0.025);
+        }
+
+        .dark {
+            --bg-primary: #1A1A2E;
+            --bg-secondary: #16213E;
+            --bg-card: #222845;
+            --bg-input: #2A2F52;
+            --text-primary: #F0E6DA;
+            --text-secondary: #B0A8C0;
+            --text-muted: #6C6890;
+            --border-color: #3A3660;
+            --border-focus: #FF8A5C;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.25);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.35);
+            --grid-color: rgba(255,255,255,0.02);
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            background-image:
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 24px 24px;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+
+        #app {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 20px 16px 60px;
+        }
+
+        .app-header {
+            text-align: center;
+            padding: 32px 16px 24px;
+            position: relative;
+        }
+
+        .header-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange));
+            color: #FFF;
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 13px;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+            box-shadow: 0 3px 12px rgba(255,107,107,0.3);
+        }
+
+        .app-header h1 {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 36px;
+            background: linear-gradient(135deg, var(--accent-coral), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+
+        .app-header p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .header-deco {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .header-deco span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: decoFloat 2s ease-in-out infinite;
+        }
+        .header-deco span:nth-child(1) { background: var(--accent-coral); animation-delay: 0s; }
+        .header-deco span:nth-child(2) { background: var(--accent-yellow); animation-delay: 0.2s; }
+        .header-deco span:nth-child(3) { background: var(--accent-teal); animation-delay: 0.4s; }
+        .header-deco span:nth-child(4) { background: var(--accent-purple); animation-delay: 0.6s; }
+        .header-deco span:nth-child(5) { background: var(--accent-pink); animation-delay: 0.8s; }
+
+        @keyframes decoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        .section-title {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 20px;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .icon-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #FFF;
+            flex-shrink: 0;
+        }
+
+        .info-section {
+            margin-bottom: 28px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            padding-left: 4px;
+        }
+
+        .input-group label .required {
+            color: var(--accent-coral);
+            margin-left: 2px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-input);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 16px;
+            color: var(--text-primary);
+            transition: border-color 0.25s, box-shadow 0.25s;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px rgba(255,138,92,0.15);
+        }
+
+        .input-field::placeholder {
+            color: var(--text-muted);
+        }
+
+        textarea.input-field {
+            min-height: 80px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .elements-section {
+            margin-bottom: 28px;
+        }
+
+        .element-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: border-color 0.25s, box-shadow 0.25s;
+            animation: cardSlideIn 0.4s ease-out both;
+        }
+
+        .element-card:hover {
+            border-color: var(--border-focus);
+        }
+
+        .element-card:focus-within {
+            border-color: var(--border-focus);
+            box-shadow: var(--shadow-md);
+        }
+
+        @keyframes cardSlideIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .element-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .element-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 15px;
+            color: #FFF;
+            flex-shrink: 0;
+        }
+
+        .element-label { flex: 1; }
+        .element-label .main-label { font-weight: 700; font-size: 15px; color: var(--text-primary); line-height: 1.4; }
+        .element-label .sub-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+        .element-icon { font-size: 18px; opacity: 0.5; }
+
+        .el-color-1 { background: #FF6B6B; } .el-text-1 { color: #FF6B6B; }
+        .el-color-2 { background: #FF9A5C; } .el-text-2 { color: #FF9A5C; }
+        .el-color-3 { background: #FDCB6E; } .el-text-3 { color: #FDCB6E; }
+        .el-color-4 { background: #00B894; } .el-text-4 { color: #00B894; }
+        .el-color-5 { background: #74B9FF; } .el-text-5 { color: #74B9FF; }
+        .el-color-6 { background: #A29BFE; } .el-text-6 { color: #A29BFE; }
+        .el-color-7 { background: #FD79A8; } .el-text-7 { color: #FD79A8; }
+        .el-color-8 { background: #6C5CE7; } .el-text-8 { color: #6C5CE7; }
+
+        .style-section { margin-bottom: 32px; }
+        .style-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .style-card {
+            background: var(--bg-card);
+            border: 2.5px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+        .style-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; opacity: 0; transition: opacity 0.25s;
+        }
+        .style-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .style-card.selected { border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(255,138,92,0.2); }
+        .style-card.selected::before { opacity: 1; }
+        .style-card .style-emoji { font-size: 32px; display: block; margin-bottom: 8px; line-height: 1; }
+        .style-card .style-name { font-family: 'ZCOOL KuaiLe', cursive; font-size: 14px; color: var(--text-primary); }
+        
+        .style-card .check-mark {
+            position: absolute; top: 8px; right: 8px; width: 22px; height: 22px; border-radius: 50%;
+            background: var(--accent-teal); color: #FFF; font-size: 11px; display: none; align-items: center; justify-content: center;
+        }
+        .style-card.selected .check-mark { display: flex; }
+
+        .style-storybook::before { background: linear-gradient(90deg, #FF9A5C, #FDCB6E); }
+        .style-fresh::before { background: linear-gradient(90deg, #00B894, #55EFC4); }
+        .style-watercolor::before { background: linear-gradient(90deg, #74B9FF, #A29BFE); }
+        .style-pastel::before { background: linear-gradient(90deg, #FD79A8, #FDCB6E); }
+        .style-healing::before { background: linear-gradient(90deg, #A29BFE, #FD79A8); }
+        .style-anime::before { background: linear-gradient(90deg, #74B9FF, #00B894); }
+
+        .generate-wrapper { text-align: center; margin-bottom: 32px; }
+        .generate-btn {
+            font-family: 'ZCOOL KuaiLe', cursive; font-size: 20px; color: #FFF;
+            background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange));
+            border: none; border-radius: 50px; padding: 16px 48px; cursor: pointer;
+            box-shadow: 0 6px 24px rgba(255,107,107,0.35); transition: all 0.3s;
+        }
+        .generate-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,107,107,0.45); }
+        .generate-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .generate-btn i { margin-right: 8px; }
+
+        .result-section { display: none; margin-top: 16px; animation: fadeSlideUp 0.5s ease-out; }
+        .result-section.visible { display: block; }
+        @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .loading-container {
+            background: var(--bg-card); border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg); padding: 48px 24px; text-align: center;
+        }
+        .loading-pencil {
+            display: inline-block; width: 60px; height: 60px; position: relative; margin-bottom: 20px;
+        }
+        .loading-pencil::before {
+            content: '\f303'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 36px;
+            color: var(--accent-orange); position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); animation: pencilDraw 1.5s ease-in-out infinite;
+        }
+        @keyframes pencilDraw { 0%, 100% { transform: translate(-50%, -50%) rotate(-15deg); } 50% { transform: translate(-50%, -50%) rotate(15deg); } }
+        .loading-dots { display: flex; justify-content: center; gap: 6px; margin-top: 16px; }
+        .loading-dots span {
+            width: 8px; height: 8px; border-radius: 50%; background: var(--accent-coral);
+            animation: dotPulse 1.2s ease-in-out infinite;
+        }
+        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes dotPulse { 0%, 100% { transform: scale(1); opacity: 0.4; } 50% { transform: scale(1.3); opacity: 1; } }
+        .loading-text { font-family: 'ZCOOL KuaiLe', cursive; font-size: 18px; color: var(--text-secondary); margin-top: 8px; }
+        .loading-sub { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
+
+        .comic-container { display: none; }
+        .comic-container.visible { display: block; }
+        .comic-frame {
+            background: var(--bg-card); border: 3px solid var(--border-color);
+            border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg);
+        }
+        .comic-title-bar {
+            background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange));
+            padding: 12px 20px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .comic-title-bar .title-text { font-family: 'ZCOOL KuaiLe', cursive; font-size: 16px; color: #FFF; }
+        .comic-title-bar .author-text { font-size: 13px; color: rgba(255,255,255,0.85); }
+        .comic-image-wrapper { position: relative; background: #F5F0EB; }
+        .dark .comic-image-wrapper { background: #1A1A2E; }
+        .comic-image-wrapper img { width: 100%; display: block; }
+
+        .comic-actions {
+            display: flex; gap: 10px; padding: 16px 20px; background: var(--bg-card); border-top: 2px solid var(--border-color);
+        }
+        .action-btn {
+            flex: 1; padding: 12px 16px; border-radius: var(--radius-sm); font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 15px; border: 2px solid transparent; cursor: pointer; transition: all 0.25s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .action-btn.primary { background: linear-gradient(135deg, var(--accent-teal), #00CEC9); color: #FFF; box-shadow: 0 4px 12px rgba(0,184,148,0.3); }
+        .action-btn.primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,184,148,0.4); }
+        .action-btn.secondary { background: var(--bg-input); color: var(--text-primary); border-color: var(--border-color); }
+        .action-btn.secondary:hover { border-color: var(--accent-purple); background: var(--bg-card); }
+
+        .error-container {
+            display: none; background: var(--bg-card); border: 2px solid var(--accent-coral);
+            border-radius: var(--radius-lg); padding: 32px 24px; text-align: center;
+        }
+        .error-container.visible { display: block; }
+        .error-icon { font-size: 40px; color: var(--accent-coral); margin-bottom: 12px; }
+        .error-message { font-size: 15px; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.6; }
+        .retry-btn {
+            font-family: 'ZCOOL KuaiLe', cursive; font-size: 16px; color: #FFF; background: var(--accent-coral);
+            border: none; border-radius: 30px; padding: 10px 28px; cursor: pointer; transition: all 0.25s;
+        }
+        .retry-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .modal-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+            z-index: 999; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px);
+        }
+        .modal-overlay.visible { display: flex; }
+        .modal-box {
+            background: var(--bg-card); border-radius: var(--radius-lg); padding: 28px 24px;
+            max-width: 360px; width: 100%; box-shadow: var(--shadow-lg); text-align: center; animation: modalPop 0.3s ease-out;
+        }
+        @keyframes modalPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-title { font-family: 'ZCOOL KuaiLe', cursive; font-size: 20px; color: var(--text-primary); margin-bottom: 10px; }
+        .modal-message { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; }
+        .modal-btn {
+            font-family: 'ZCOOL KuaiLe', cursive; font-size: 15px; padding: 10px 28px; border: none; border-radius: 30px;
+            cursor: pointer; transition: all 0.2s; background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange)); color: #FFF;
+        }
+        .modal-btn:hover { opacity: 0.9; }
+        
+        .app-footer { text-align: center; padding: 24px 0 8px; color: var(--text-muted); font-size: 12px; }
+
+        @media (max-width: 560px) {
+            .app-header h1 { font-size: 28px; }
+            .info-grid { grid-template-columns: 1fr; }
+            .style-grid { grid-template-columns: repeat(2, 1fr); }
+            .generate-btn { padding: 14px 36px; font-size: 18px; }
+            .comic-actions { flex-direction: column; }
+            .element-card { padding: 14px; }
+        }
+        @media (max-width: 380px) {
+            #app { padding: 12px 10px 48px; }
+            .app-header h1 { font-size: 24px; }
+            .style-grid { gap: 8px; }
+            .style-card { padding: 12px 6px; }
+            .style-card .style-emoji { font-size: 26px; }
+            .style-card .style-name { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- ===== HEADER ===== -->
+        <header class="app-header">
+            <div class="header-badge">AI 漫畫工坊</div>
+            <h1>四格漫畫創作工坊</h1>
+            <p>填寫故事元素，AI 幫你畫出精彩四格漫畫！</p>
+            <div class="header-deco">
+                <span></span><span></span><span></span><span></span><span></span>
+            </div>
+        </header>
+
+        <main>
+            <!-- ===== STORY INFO ===== -->
+            <section class="info-section">
+                <div class="section-title">
+                    <span class="icon-circle" style="background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange));">
+                        <i class="fas fa-pen-fancy"></i>
+                    </span>
+                    基本資料
+                </div>
+                <div class="info-grid">
+                    <div class="input-group">
+                        <label>故事名稱 <span class="required">*</span></label>
+                        <input type="text" id="storyName" class="input-field" placeholder="例如：操場上的友情">
+                    </div>
+                    <div class="input-group">
+                        <label>創作者姓名 <span class="required">*</span></label>
+                        <input type="text" id="studentName" class="input-field" placeholder="你的名字">
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== STORY ELEMENTS ===== -->
+            <section class="elements-section">
+                <div class="section-title">
+                    <span class="icon-circle" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </span>
+                    故事元素
+                </div>
+
+                <!-- Element 1: When -->
+                <div class="element-card">
+                    <div class="element-header">
+                        <span class="element-number el-color-1">一</span>
+                        <div class="element-label">
+                            <div class="main-label">（何時）這故事是甚麼時候發生？</div>
+                            <div class="sub-label">描述時間，例如：上星期三的下午</div>
+                        </div>
+                        <i class="fas fa-clock el-text-1 element-icon"></i>
+                    </div>
+                    <input type="text" id="el_when" class="input-field" placeholder="在甚麼時候...">
+                </div>
+
+                <!-- Element 2: Who -->
+                <div class="element-card">
+                    <div class="element-header">
+                        <span class="element-number el-color-2">二</span>
+                        <div class="element-label">
+                            <div class="main-label">（何人）這故事包括哪些人物？</div>
+                            <div class="sub-label">寫出角色名字或身份</div>
+                        </div>
+                        <i class="fas fa-users el-text-2 element-icon"></i>
+                    </div>
+                    <input type="text" id="el_who" class="input-field" placeholder="例如：我、小明、王老師">
+                </div>
+
+                <!-- Element 3: Where -->
+                <div class="element-card">
+                    <div class="element-header">
+                        <span class="element-number el-color-3">三</span>
+                        <div class="element-label">
+                            <div class="main-label">（何地）這故事是在哪裏發生？</div>
+                            <div class="sub-label">描述地點場景</div>
+                        </div>
+                        <i class="fas fa-map-marker-alt el-text-3 element-icon"></i>
+                    </div>
+                    <input type="text" id="el_where" class="input-field" placeholder="例如：學校操場">
+                </div>
+
+                <!-- Element 4: What -->
+                <div class="element-card">
+                    <div class="element-header">
+                        <span class="element-number el-color-4">四</span>
+                        <div class="element-label">
+                            <div class="main-label">（何事）發生了甚麼事情？你怎樣做？</div>
+                            <div class="sub-label">描述事件經過和你的行動</div>
+                        </div>
+                        <i class="fas fa-bolt el-text-4 element-icon"></i>
+                    </div>
+                    <textarea id="el_what" class="input-field" placeholder="描述發生的事情和你的行動..."></textarea>
+                </div>
+
+                <!-- Element 5: Reactions -->
+                <div class="element-card">
+                    <div class="element-header">
+                        <span class="element-number el-color-5">五</span>
+                        <div class="element-label">
+                            <div class="main-label">其他人看見你的行為和表現，有甚麼反應？</div>
+                            <div class="sub-label">校長／老師／同學／父母等的反應</div>
+                        </div>
+                        <i class="fas fa-comment-dots el-text-5 element-icon"></i>
+                    </div>
+                    <textarea id="el_reactions" class="input-field" placeholder="他們的反應是..."></textarea>
+                </div>
+
+                <!-- Element 6: My Feelings -->
+                <div class="element-card">
+                    <div class="element-header">
+                        <span class="element-number el-color-6">六</span>
+                        <div class="element-label">
+                            <div class="main-label">（如何）我的心情怎樣？</div>
+                            <div class="sub-label">描述你的感受</div>
+                        </div>
+                        <i class="fas fa-heart el-text-6 element-icon"></i>
+                    </div>
+                    <input type="text" id="el_myFeelings" class="input-field" placeholder="例如：開心、感動、緊張...">
+                </div>
+
+                <!-- Element 7: Others' Feelings -->
+                <div class="element-card">
+                    <div class="element-header">
+                        <span class="element-number el-color-7">七</span>
+                        <div class="element-label">
+                            <div class="main-label">（如何）其他人的心情如何？</div>
+                            <div class="sub-label">校長／老師／同學／父母的心情</div>
+                        </div>
+                        <i class="fas fa-smile el-text-7 element-icon"></i>
+                    </div>
+                    <input type="text" id="el_othersFeelings" class="input-field" placeholder="他們的心情是...">
+                </div>
+
+                <!-- Element 8: Others Say -->
+                <div class="element-card">
+                    <div class="element-header">
+                        <span class="element-number el-color-8">八</span>
+                        <div class="element-label">
+                            <div class="main-label">其他人對我說甚麼？</div>
+                            <div class="sub-label">校長／老師／同學／父母的話</div>
+                        </div>
+                        <i class="fas fa-quote-left el-text-8 element-icon"></i>
+                    </div>
+                    <textarea id="el_othersSay" class="input-field" placeholder="他們對你說了甚麼..."></textarea>
+                </div>
+            </section>
+
+            <!-- ===== STYLE SELECTION ===== -->
+            <section class="style-section">
+                <div class="section-title">
+                    <span class="icon-circle" style="background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));">
+                        <i class="fas fa-palette"></i>
+                    </span>
+                    選擇漫畫風格
+                </div>
+                <div class="style-grid">
+                    <div class="style-card style-storybook selected" data-style="storybook" onclick="selectStyle(this)">
+                        <span class="check-mark"><i class="fas fa-check"></i></span>
+                        <span class="style-emoji">📖</span>
+                        <span class="style-name">兒童繪本風</span>
+                    </div>
+                    <div class="style-card style-fresh" data-style="fresh" onclick="selectStyle(this)">
+                        <span class="check-mark"><i class="fas fa-check"></i></span>
+                        <span class="style-emoji">🌿</span>
+                        <span class="style-name">小清新手繪風</span>
+                    </div>
+                    <div class="style-card style-watercolor" data-style="watercolor" onclick="selectStyle(this)">
+                        <span class="check-mark"><i class="fas fa-check"></i></span>
+                        <span class="style-emoji">🎨</span>
+                        <span class="style-name">水彩輕塗鴉風</span>
+                    </div>
+                    <div class="style-card style-pastel" data-style="pastel" onclick="selectStyle(this)">
+                        <span class="check-mark"><i class="fas fa-check"></i></span>
+                        <span class="style-emoji">🖍️</span>
+                        <span class="style-name">粉彩粉蠟筆風</span>
+                    </div>
+                    <div class="style-card style-healing" data-style="healing" onclick="selectStyle(this)">
+                        <span class="check-mark"><i class="fas fa-check"></i></span>
+                        <span class="style-emoji">☁️</span>
+                        <span class="style-name">圓潤治癒插畫風</span>
+                    </div>
+                    <div class="style-card style-anime" data-style="anime" onclick="selectStyle(this)">
+                        <span class="check-mark"><i class="fas fa-check"></i></span>
+                        <span class="style-emoji">⭐</span>
+                        <span class="style-name">日本卡通風</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== GENERATE BUTTON ===== -->
+            <div class="generate-wrapper">
+                <button class="generate-btn" id="generateBtn" onclick="generateComic()">
+                    <i class="fas fa-wand-magic-sparkles"></i>生成四格漫畫
+                </button>
+            </div>
+        </main>
+
+        <!-- ===== RESULT SECTION ===== -->
+        <section class="result-section" id="resultSection">
+            <!-- Loading -->
+            <div class="loading-container" id="loadingContainer">
+                <div class="loading-pencil"></div>
+                <div class="loading-text">正在繪製你的漫畫...</div>
+                <div class="loading-sub">AI 畫家正在努力創作中，請耐心等候幾秒鐘</div>
+                <div class="loading-dots">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+
+            <!-- Comic Result -->
+            <div class="comic-container" id="comicContainer">
+                <div class="comic-frame">
+                    <div class="comic-title-bar">
+                        <span class="title-text" id="comicTitleText"></span>
+                        <span class="author-text" id="comicAuthorText"></span>
+                    </div>
+                    <div class="comic-image-wrapper">
+                        <img id="comicImage" alt="四格漫畫">
+                    </div>
+                    <div class="comic-actions">
+                        <button class="action-btn primary" onclick="downloadComic()">
+                            <i class="fas fa-download"></i>下載漫畫
+                        </button>
+                        <button class="action-btn secondary" onclick="regenerate()">
+                            <i class="fas fa-rotate-right"></i>重新生成
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error -->
+            <div class="error-container" id="errorContainer">
+                <div class="error-icon"><i class="fas fa-cloud-exclamation"></i>😢</div>
+                <div class="error-message" id="errorMessage">生成失敗，請重試。</div>
+                <button class="retry-btn" onclick="regenerate()">
+                    <i class="fas fa-rotate-right"></i> 重新嘗試
+                </button>
+            </div>
+        </section>
+
+        <footer class="app-footer">
+            開源 AI 繪圖驅動 · 四格漫畫創作工坊
+        </footer>
+    </div>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box">
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-message" id="modalMessage"></div>
+            <button class="modal-btn" onclick="closeModal()">好的</button>
+        </div>
+    </div>
+
+    <script>
+        /* ========== DARK MODE DETECTION ========== */
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(event) {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        /* ========== STATE ========== */
+        var selectedStyle = 'storybook';
+        var currentComicUrl = '';
+        var isGenerating = false;
+
+        /* ========== STYLE MAP ========== */
+        var styleDescriptions = {
+            storybook: "FULL COLOR children's picture book illustration style, rich vibrant warm colors, colorful backgrounds, soft rounded shapes, gentle watercolor-like finish, whimsical storybook quality, cozy and charming, every panel filled with beautiful colors",
+            fresh: "FULL COLOR clean hand-drawn illustration style with vibrant yet soft coloring, colorful pastel palette, fresh airy feel, delicate linework with lively color fills, bright and cheerful tones",
+            watercolor: "FULL COLOR soft watercolor painting style, rich colorful washes blending naturally, vivid artistic brushstroke textures, dreamy colorful palette with blues, pinks, greens, and warm tones throughout",
+            pastel: "FULL COLOR soft pastel and crayon art style, rich chalky colorful textures, vibrant rainbow pastel colors, childlike crayon drawing feel with bold colorful fills, warm and vivid",
+            healing: "FULL COLOR kawaii rounded healing illustration style, very round puffy soft shapes, vibrant warm soothing pastel colors, extremely cute gentle characters, cozy colorful atmosphere with rich backgrounds",
+            anime: "FULL COLOR Japanese manga cartoon style, anime-influenced expressive large sparkling eyes, dynamic energetic poses, clean bold linework, vibrant colorful manga panel style, rich saturated colors and colorful backgrounds"
+        };
+
+        /* ========== STYLE SELECTION ========== */
+        function selectStyle(card) {
+            document.querySelectorAll('.style-card').forEach(function(c) {
+                c.classList.remove('selected');
+            });
+            card.classList.add('selected');
+            selectedStyle = card.getAttribute('data-style');
+        }
+
+        /* ========== MODAL ========== */
+        function showModal(title, message) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').innerHTML = message;
+            document.getElementById('modalOverlay').classList.add('visible');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('visible');
+        }
+
+        /* ========== VALIDATION ========== */
+        function validateForm() {
+            var storyName = document.getElementById('storyName').value.trim();
+            var studentName = document.getElementById('studentName').value.trim();
+
+            if (!storyName) {
+                showModal('請填寫故事名稱', '給你的四格漫畫起一個好聽的名字吧！');
+                document.getElementById('storyName').focus();
+                return false;
+            }
+            if (!studentName) {
+                showModal('請填寫創作者姓名', '寫上你的名字，讓大家知道這是你的作品！');
+                document.getElementById('studentName').focus();
+                return false;
+            }
+
+            var fields = ['el_when', 'el_who', 'el_where', 'el_what', 'el_reactions', 'el_myFeelings', 'el_othersFeelings', 'el_othersSay'];
+            var filled = 0;
+            fields.forEach(function(id) {
+                if (document.getElementById(id).value.trim()) {
+                    filled++;
+                }
+            });
+
+            if (filled < 3) {
+                showModal('需要更多故事內容', '請至少填寫 3 個故事元素，這樣 AI 才能畫出精彩的漫畫哦！');
+                return false;
+            }
+
+            return true;
+        }
+
+        /* ========== PROMPT BUILDER ========== */
+        function buildPrompt() {
+            var storyName = document.getElementById('storyName').value.trim();
+            var studentName = document.getElementById('studentName').value.trim();
+            var when = document.getElementById('el_when').value.trim() || 'Unspecified time';
+            var who = document.getElementById('el_who').value.trim() || 'Unspecified people';
+            var where = document.getElementById('el_where').value.trim() || 'Unspecified location';
+            var what = document.getElementById('el_what').value.trim() || 'Unspecified action';
+            var reactions = document.getElementById('el_reactions').value.trim() || 'Unspecified reactions';
+            var myFeelings = document.getElementById('el_myFeelings').value.trim() || 'Unspecified feelings';
+            var othersFeelings = document.getElementById('el_othersFeelings').value.trim() || 'Unspecified feelings';
+            var othersSay = document.getElementById('el_othersSay').value.trim() || 'Unspecified words';
+
+            var styleDesc = styleDescriptions[selectedStyle];
+
+            // 為確保外部免費 API 能順利執行，Prompt 使用英文建構以達最佳繪圖效果
+            var prompt = 'Create a FULL COLOR vibrant 4-panel comic strip (2x2 grid) with clear panel borders.\n';
+            prompt += 'Art style: ' + styleDesc + '\n';
+            prompt += 'Comic Title: ' + storyName + '\n';
+            
+            prompt += 'Panel 1: Time: ' + when + ', Place: ' + where + '. Show characters: ' + who + '.\n';
+            prompt += 'Panel 2: Event: ' + what + '.\n';
+            prompt += 'Panel 3: Others reaction: ' + reactions + '.\n';
+            prompt += 'Panel 4: Resolution. My feeling: ' + myFeelings + ', Others feeling: ' + othersFeelings + ', They say: ' + othersSay + '.\n';
+            prompt += 'Make sure characters are cute, expressive, child-friendly, and consistent across all 4 panels.';
+
+            return prompt;
+        }
+
+        /* ========== GENERATE COMIC (Replaced for Generic Web API) ========== */
+        function generateComic() {
+            if (isGenerating) return;
+            if (!validateForm()) return;
+
+            isGenerating = true;
+            var btn = document.getElementById('generateBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 生成中...';
+
+            var resultSection = document.getElementById('resultSection');
+            var loadingContainer = document.getElementById('loadingContainer');
+            var comicContainer = document.getElementById('comicContainer');
+            var errorContainer = document.getElementById('errorContainer');
+
+            resultSection.classList.add('visible');
+            loadingContainer.style.display = 'block';
+            comicContainer.classList.remove('visible');
+            errorContainer.classList.remove('visible');
+
+            resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            var prompt = buildPrompt();
+
+            try {
+                // 使用免費開放的 pollinations.ai 進行繪圖（完美適用於前端 GitHub Pages）
+                // 產生亂數 seed 避免瀏覽器快取相同的圖
+                var seed = Math.floor(Math.random() * 9999999);
+                var encodedPrompt = encodeURIComponent(prompt);
+                // 產出 1024x1024 解析度的圖片
+                var imageUrl = 'https://image.pollinations.ai/prompt/' + encodedPrompt + '?width=1024&height=1024&nologo=true&seed=' + seed;
+
+                // 預先載入圖片，確認載入完成才顯示
+                var img = new Image();
+                img.onload = function() {
+                    showComic(imageUrl);
+                };
+                img.onerror = function() {
+                    showError('生成圖片時發生錯誤，請重試。');
+                };
+                img.src = imageUrl;
+
+            } catch (err) {
+                showError('網路發生錯誤。');
+            }
+        }
+
+        /* ========== SHOW COMIC ========== */
+        function showComic(url) {
+            currentComicUrl = url;
+            var storyName = document.getElementById('storyName').value.trim();
+            var studentName = document.getElementById('studentName').value.trim();
+
+            document.getElementById('comicTitleText').textContent = '「' + storyName + '」';
+            document.getElementById('comicAuthorText').textContent = '作者：' + studentName;
+            document.getElementById('comicImage').src = url;
+
+            document.getElementById('loadingContainer').style.display = 'none';
+            document.getElementById('comicContainer').classList.add('visible');
+            document.getElementById('errorContainer').classList.remove('visible');
+
+            resetButton();
+
+            setTimeout(function() {
+                document.getElementById('comicContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        /* ========== SHOW ERROR ========== */
+        function showError(message) {
+            document.getElementById('loadingContainer').style.display = 'none';
+            document.getElementById('comicContainer').classList.remove('visible');
+            document.getElementById('errorContainer').classList.add('visible');
+            document.getElementById('errorMessage').textContent = message || '生成失敗，請重試。';
+
+            resetButton();
+        }
+
+        /* ========== RESET BUTTON ========== */
+        function resetButton() {
+            isGenerating = false;
+            var btn = document.getElementById('generateBtn');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i>生成四格漫畫';
+        }
+
+        /* ========== DOWNLOAD ========== */
+        function downloadComic() {
+            if (!currentComicUrl) return;
+
+            var storyName = document.getElementById('storyName').value.trim() || '四格漫畫';
+            var filename = storyName + '_四格漫畫.png';
+
+            fetch(currentComicUrl)
+                .then(function(response) {
+                    return response.blob();
+                })
+                .then(function(blob) {
+                    var blobUrl = URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    setTimeout(function() {
+                        URL.revokeObjectURL(blobUrl);
+                    }, 1000);
+                })
+                .catch(function() {
+                    // 若有跨域問題則新分頁開啟
+                    var a = document.createElement('a');
+                    a.href = currentComicUrl;
+                    a.download = filename;
+                    a.target = '_blank';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                });
+        }
+
+        /* ========== REGENERATE ========== */
+        function regenerate() {
+            document.getElementById('resultSection').classList.remove('visible');
+            document.getElementById('comicContainer').classList.remove('visible');
+            document.getElementById('errorContainer').classList.remove('visible');
+            document.getElementById('loadingContainer').style.display = 'none';
+            currentComicUrl = '';
+
+            setTimeout(function() {
+                document.getElementById('generateBtn').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
+    </script>
+</body>
+</html>
